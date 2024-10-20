@@ -1,0 +1,20 @@
+[package]
+name = "flappybird_CanvasByRustWasm"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+web-bindgen = "0.2"
+web-sys = { version = "0.3.70", features = [
+  'Document',
+  'Element',
+  'HtmlElement',
+  'Node',
+  'Window',
+  'console',
+  'CanvasRenderingContext2d',
+  'HtmlCanvasElement',
+] }

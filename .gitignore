@@ -1,0 +1,4 @@
+# 忽略 VSCode 设置文件
+.vscode/
+
+.target/
