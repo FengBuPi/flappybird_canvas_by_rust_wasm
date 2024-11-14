@@ -7,7 +7,10 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-web-bindgen = "0.2"
+wasm-bindgen = "0.2.95"
+console_error_panic_hook = "0.1.7" #wasm调试钩子
+console_log = "0.2" # 用于输出到浏览器控制台
+log = "0.4" # 添加这个依赖
 web-sys = { version = "0.3.70", features = [
   'Document',
   'Element',
@@ -17,4 +20,9 @@ web-sys = { version = "0.3.70", features = [
   'console',
   'CanvasRenderingContext2d',
   'HtmlCanvasElement',
+  'HtmlImageElement',
+  'HtmlImageElement',
+  'Event',
+  'MouseEvent',
+  "Performance",
 ] }
