@@ -72,12 +72,13 @@ impl Bird {
         let delta_time = (current_time - self.start_time).floor();
         self.start_time = current_time;
 
-        let h = *self.v0.borrow() * delta_time + self.acc * delta_time * delta_time / 2.0;
-        self.y += h;
+        // 小鸟位移
+        self.y += *self.v0.borrow() * delta_time + self.acc * delta_time * delta_time / 2.0;
 
-        let v0 = Rc::new(RefCell::new(*self.v0.borrow() + self.acc * delta_time));
-        self.v0 = v0;
+        let current_v0 = *self.v0.borrow(); // 不可变借用一次，缓存当前值
+        *self.v0.borrow_mut() = current_v0 + self.acc * delta_time;
 
+        // 小鸟旋转
         let angle = *self.v0.borrow() / self.max_speed * self.max_angle;
         if angle > self.max_angle {
             self.ctx.rotate(self.max_angle);
