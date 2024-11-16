@@ -2,7 +2,7 @@
 pub mod draw;
 
 // Game Module
-pub mod bird;
+pub mod Bird;
 pub mod game;
 pub mod land;
 pub mod pipe;
