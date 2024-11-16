@@ -1,7 +1,9 @@
 // 模块化
-use crate::bird::Bird;
 use crate::draw::Draw;
-// use crate::sky::Sky;
+use crate::land::Land;
+use crate::pipe::Pipe;
+use crate::sky::Sky;
+use crate::Bird::Bird;
 
 // 用于调试代码的第三方库
 use console_error_panic_hook::set_once;
@@ -12,6 +14,8 @@ use log::Level; // 调试
 use std::panic;
 use wasm_bindgen::prelude::*;
 use web_sys::*;
+
+const GAME_SPEED: f64 = 0.5;
 
 #[wasm_bindgen]
 pub struct Game {
@@ -55,48 +59,65 @@ impl Game {
         self.init();
     }
 
+    // 初始化顺序对应图层显示顺序
     fn init(&mut self) {
+        self.init_sky();
+        self.init_pipe();
+        self.init_land();
         self.init_bird();
     }
 
     fn init_bird(&mut self) {
         // 加载图像
         let image = HtmlImageElement::new().unwrap();
-        image.set_src("/flappybird_Rust/asset/images/birds.png");
+        image.set_src("/asset/images/birds.png");
         self.drawable_list
             .push(Box::new(Bird::new(&self.context, image)));
     }
 
-    // fn init_sky() {
-    //     // 初始化天空
-    //     for _ in 0..2 {
-    //         // self.drawable_list
-    //         //     .push(Box::new(Sky::new(&self.context, image)));
-    //         //   const sky = new Sky(this.ctx, skyImage, i * skyImage.width, this.speed);
-    //         //   this.drawableList.push(sky);
-    //     }
-    // }
+    // 初始化天空
+    fn init_sky(&mut self) {
+        let image = HtmlImageElement::new().unwrap();
+        image.set_src("/asset/images/sky.png");
+        for i in 0..2 {
+            let image = image.clone();
+            let x = (i * image.width()) as f64;
+            self.drawable_list
+                .push(Box::new(Sky::new(&self.context, image, x, GAME_SPEED)));
+        }
+    }
 
-    // fn init_pipe() {
-    //     // 初始化管道
-    //     // const topImg = pipe2Image;
-    //     // const botImg = pipe1Image;
-    //     for _ in 0..6 {
-    //         //   const pipe = new Pipe(this.ctx, topImg, botImg, i * 3 * topImg.width, this.speed);
-    //         // self.drawable_list
-    //         //     .push(Box::new(Sky::new(&self.context, image)));
-    //         //   this.drawableList.push(pipe);
-    //     }
-    // }
+    // 初始化管道
+    fn init_pipe(&mut self) {
+        let pipe1_image = HtmlImageElement::new().unwrap();
+        pipe1_image.set_src("/asset/images/pipe1.png");
+        let pipe2_image = HtmlImageElement::new().unwrap();
+        pipe2_image.set_src("/asset/images/pipe2.png");
+        for i in 0..6 {
+            let pipe1_image = pipe1_image.clone();
+            let pipe2_image = pipe2_image.clone();
+            let x = (i * 3 * pipe1_image.width()) as f64;
+            self.drawable_list.push(Box::new(Pipe::new(
+                &self.context,
+                pipe1_image,
+                pipe2_image,
+                x,
+                GAME_SPEED,
+            )));
+        }
+    }
 
-    // fn init_land() {
-    //     // 初始化陆地
-    //     // const landImg = landImage;
-    //     for _ in 0..4 {
-    //         //   const land = new Land(this.ctx, landImg, i * landImg.width, this.speed);
-    //         //   this.drawableList.push(land);
-    //     }
-    // }
+    // 初始化陆地
+    fn init_land(&mut self) {
+        let image = HtmlImageElement::new().unwrap();
+        image.set_src("/asset/images/land.png");
+        for i in 0..4 {
+            let image = image.clone();
+            let x = (i * image.width()) as f64;
+            self.drawable_list
+                .push(Box::new(Land::new(&self.context, image, x, GAME_SPEED)));
+        }
+    }
 
     pub fn animation(&mut self) {
         // 清除画布
