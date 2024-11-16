@@ -1,5 +1,5 @@
 [package]
-name = "flappybird_CanvasByRustWasm"
+name = "flappybird_canvas_by_rust_wasm"
 version = "0.1.0"
 edition = "2021"
 
@@ -9,7 +9,7 @@ crate-type = ["cdylib"]
 [dependencies]
 wasm-bindgen = "0.2.95"
 console_error_panic_hook = "0.1.7" #wasm调试钩子
-console_log = "0.2" # 用于输出到浏览器控制台
+console_log = "1.0.0" # 用于输出到浏览器控制台
 log = "0.4" # 添加这个依赖
 web-sys = { version = "0.3.70", features = [
   'Document',
