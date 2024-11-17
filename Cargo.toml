@@ -9,8 +9,8 @@ crate-type = ["cdylib"]
 [dependencies]
 wasm-bindgen = "0.2.95"
 console_error_panic_hook = "0.1.7" #wasm调试钩子
-console_log = "1.0.0" # 用于输出到浏览器控制台
-log = "0.4" # 添加这个依赖
+console_log = "1.0.0" # rust错误映射为浏览器控制台日志
+log = "0.4" # rust错误映射为浏览器控制台日志
 js-sys = "0.3"
 web-sys = { version = "0.3.70", features = [
   'Document',
