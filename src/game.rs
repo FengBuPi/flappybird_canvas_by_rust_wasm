@@ -1,9 +1,9 @@
 // 模块化
+use crate::bird::Bird;
 use crate::draw::Draw;
 use crate::land::Land;
 use crate::pipe::Pipe;
 use crate::sky::Sky;
-use crate::Bird::Bird;
 
 // 用于调试代码的第三方库
 use console_error_panic_hook::set_once;
