@@ -37,11 +37,6 @@ impl Game {
             .dyn_into::<web_sys::HtmlCanvasElement>()
             .map_err(|_| ())
             .unwrap();
-
-        // 设置 Canvas 宽高
-        // canvas.set_width(800);
-        // canvas.set_height(600);
-
         let context = canvas
             .get_context("2d")
             .unwrap()

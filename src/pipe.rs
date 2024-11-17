@@ -11,7 +11,6 @@ pub struct Pipe {
 }
 
 impl Pipe {
-    // 创建一个新的 Bird
     pub fn new(
         ctx: &CanvasRenderingContext2d,
         pipe1_image: HtmlImageElement,

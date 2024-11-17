@@ -10,7 +10,6 @@ pub struct Land {
 }
 
 impl Land {
-    // 创建一个新的 Bird
     pub fn new(
         ctx: &CanvasRenderingContext2d,
         land_img: HtmlImageElement,

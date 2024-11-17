@@ -10,7 +10,6 @@ pub struct Sky {
 }
 
 impl Sky {
-    // 创建一个新的 Bird
     pub fn new(
         ctx: &CanvasRenderingContext2d,
         sky_img: HtmlImageElement,
@@ -28,7 +27,6 @@ impl Sky {
 }
 
 impl Draw for Sky {
-    // 绘制鸟
     fn draw(&mut self) {
         self.ctx
             .draw_image_with_html_image_element(&self.sky_img, self.x, self.y)
