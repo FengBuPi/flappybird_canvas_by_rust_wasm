@@ -7,8 +7,8 @@ use web_sys::*;
 pub struct Bird {
     ctx: CanvasRenderingContext2d,
     bird_img: HtmlImageElement,
-    x: f64,
-    y: f64,
+    pub x: f64,
+    pub y: f64,
     bird_width: f64,
     bird_height: f64,
     index: f64,
@@ -68,7 +68,6 @@ impl Draw for Bird {
     fn draw(&mut self) {
         self.ctx.save();
         self.ctx.translate(self.x, self.y).unwrap(); // 控制小鸟位移
-
         let current_time = window().unwrap().performance().unwrap().now(); // 返回当前时间的高精度时间戳
         let delta_time = (current_time - self.start_time).floor();
         self.start_time = current_time;
@@ -105,7 +104,6 @@ impl Draw for Bird {
         if self.index > 14.0 {
             self.index = 0.0;
         }
-
-        self.ctx.restore();
+        self.ctx.restore(); // 恢复状态
     }
 }
