@@ -28,7 +28,6 @@ impl Land {
 }
 
 impl Draw for Land {
-    // 绘制鸟
     fn draw(&mut self) {
         self.ctx
             .draw_image_with_html_image_element(&self.land_img, self.x, self.y)
