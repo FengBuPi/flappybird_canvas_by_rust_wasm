@@ -10,8 +10,10 @@ use console_error_panic_hook::set_once;
 use console_log;
 use log::Level; // 调试
 
+use std::cell::RefCell;
 // wasm 运行环境
 use std::panic;
+use std::rc::Rc;
 use wasm_bindgen::prelude::*;
 use web_sys::*;
 
@@ -20,7 +22,8 @@ const GAME_SPEED: f64 = 0.5;
 #[wasm_bindgen]
 pub struct Game {
     context: CanvasRenderingContext2d,
-    drawable_list: Vec<Box<dyn Draw>>, // 存储实现了Draw trait的实例
+    drawable_list: Vec<Rc<RefCell<dyn Draw>>>, // 存储实现了Draw trait的实例
+    bird: Option<Rc<RefCell<Bird>>>,
 }
 
 #[wasm_bindgen]
@@ -47,6 +50,7 @@ impl Game {
         Game {
             context,
             drawable_list: Vec::new(),
+            bird: None,
         }
     }
 
@@ -57,17 +61,21 @@ impl Game {
     // 初始化顺序对应图层显示顺序
     fn init(&mut self) {
         self.init_sky();
+        self.init_bird();
         self.init_pipe();
         self.init_land();
-        self.init_bird();
     }
 
     fn init_bird(&mut self) {
         // 加载图像
         let image = HtmlImageElement::new().unwrap();
         image.set_src("/asset/images/birds.png");
-        self.drawable_list
-            .push(Box::new(Bird::new(&self.context, image)));
+        let bird = Bird::new(&self.context, image);
+        self.bird = Some(Rc::new(RefCell::new(bird)));
+        if let Some(bird) = self.bird.as_ref() {
+            self.drawable_list
+                .push(Rc::clone(bird) as Rc<RefCell<dyn Draw>>);
+        }
     }
 
     // 初始化天空
@@ -77,8 +85,12 @@ impl Game {
         for i in 0..2 {
             let image = image.clone();
             let x = (i * image.width()) as f64;
-            self.drawable_list
-                .push(Box::new(Sky::new(&self.context, image, x, GAME_SPEED)));
+            self.drawable_list.push(Rc::new(RefCell::new(Sky::new(
+                &self.context,
+                image,
+                x,
+                GAME_SPEED,
+            ))));
         }
     }
 
@@ -92,13 +104,13 @@ impl Game {
             let pipe1_image = pipe1_image.clone();
             let pipe2_image = pipe2_image.clone();
             let x = (i * 3 * pipe1_image.width()) as f64;
-            self.drawable_list.push(Box::new(Pipe::new(
+            self.drawable_list.push(Rc::new(RefCell::new(Pipe::new(
                 &self.context,
                 pipe1_image,
                 pipe2_image,
                 x,
                 GAME_SPEED,
-            )));
+            ))));
         }
     }
 
@@ -109,8 +121,12 @@ impl Game {
         for i in 0..4 {
             let image = image.clone();
             let x = (i * image.width()) as f64;
-            self.drawable_list
-                .push(Box::new(Land::new(&self.context, image, x, GAME_SPEED)));
+            self.drawable_list.push(Rc::new(RefCell::new(Land::new(
+                &self.context,
+                image,
+                x,
+                GAME_SPEED,
+            ))));
         }
     }
 
@@ -125,8 +141,30 @@ impl Game {
         // 开启新路径
         self.context.begin_path();
         // 绘制所有元素
-        for drawable in self.drawable_list.iter_mut() {
-            drawable.draw();
+        for drawable in self.drawable_list.iter() {
+            drawable.borrow_mut().draw();
         }
+
+        if let Some(bird) = &self.bird {
+            // 碰到地面或者天花板 gameover
+            if (bird.borrow().y > (self.context.canvas().unwrap().height() - 112) as f64)
+                || (bird.borrow().y < -10.0)
+            {
+                log::info!(
+                    "游戏结束bird.borrow().y:{},canvas height():{}",
+                    bird.borrow().y,
+                    self.context.canvas().unwrap().height()
+                );
+            }
+
+            // 碰到管道
+            if self
+                .context
+                .is_point_in_path_with_f64(bird.borrow().x, bird.borrow().y)
+            {
+                log::info!("碰到管道");
+            }
+        }
+        // log::info!("鸟的位置x:{},y:{}", bird.borrow().x, bird.borrow().y);
     }
 }
