@@ -1,7 +1,7 @@
 # 编译
 监听文件变化触发编译
 ~~~bash
-cargo watch -s 'wasm-pack build --dev --target web'
+cargo watch -s 'wasm-pack build --dev --target web && tsc'
 ~~~
 # git 提交规范
 ```bash
