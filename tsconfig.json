@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext", // 模块系统，默认为 commonjs
+    "lib": [
+      "dom",
+      "es6"
+    ], // 编译时使用的库文件
+    "outDir": "./dist",
+    "baseUrl": ".", // 基础路径
+    "paths": {
+      "*": [
+        "src/*"
+      ] // 路径映射
+    },
+    "strict": true,
+    "esModuleInterop": true, // 启用 ES 模块互操作性
+    "skipLibCheck": true, // 跳过库文件检查
+    "forceConsistentCasingInFileNames": true, // 强制文件名大小写一致性
+  },
+  "include": [
+    "./src_ts/**/*"
+  ],
+  "exclude": [
+    "node_modules", // 排除 node_modules 目录下的所有文件
+    "build", // 排除 build 目录下的所有文件
+    "dist", // 排除 dist 目录下的所有文件
+  ]
+}
