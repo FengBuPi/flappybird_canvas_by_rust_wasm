@@ -54,12 +54,12 @@ impl Game {
         }
     }
 
-    pub fn game_start(&mut self) {
-        self.init();
-    }
+    // pub fn game_start(&mut self) {
+    //     self.init();
+    // }
 
     // 初始化顺序对应图层显示顺序
-    fn init(&mut self) {
+    pub fn game_init(&mut self) {
         self.init_sky();
         self.init_bird();
         self.init_pipe();
@@ -130,7 +130,8 @@ impl Game {
         }
     }
 
-    pub fn animation(&mut self) {
+    // 动画帧
+    pub fn frame(&mut self) {
         // 清除画布
         self.context.clear_rect(
             0.0,
