@@ -19,6 +19,14 @@ use web_sys::*;
 
 const GAME_SPEED: f64 = 0.5;
 
+#[wasm_bindgen(start)]
+pub fn init_wasm() {
+    // wasm调试钩子
+    console_log::init_with_level(Level::Debug).expect("初始化日志失败");
+    panic::set_hook(Box::new(console_error_panic_hook::hook));
+    set_once();
+}
+
 #[wasm_bindgen]
 pub struct Game {
     context: CanvasRenderingContext2d,
@@ -31,9 +39,6 @@ impl Game {
     // 构造函数
     #[wasm_bindgen(constructor)]
     pub fn new(ctx: &str) -> Game {
-        console_log::init_with_level(Level::Debug).expect("初始化日志失败");
-        panic::set_hook(Box::new(console_error_panic_hook::hook));
-        set_once(); // wasm调试钩子
         let document = web_sys::window().unwrap().document().unwrap(); // 获取 document对象
         let canvas = document.get_element_by_id(ctx).unwrap(); // 获取 canvas对象
         let canvas: web_sys::HtmlCanvasElement = canvas
@@ -53,10 +58,6 @@ impl Game {
             bird: None,
         }
     }
-
-    // pub fn game_start(&mut self) {
-    //     self.init();
-    // }
 
     // 初始化顺序对应图层显示顺序
     pub fn game_init(&mut self) {
@@ -151,11 +152,11 @@ impl Game {
             if (bird.borrow().y > (self.context.canvas().unwrap().height() - 112) as f64)
                 || (bird.borrow().y < -10.0)
             {
-                log::info!(
-                    "游戏结束bird.borrow().y:{},canvas height():{}",
-                    bird.borrow().y,
-                    self.context.canvas().unwrap().height()
-                );
+                // log::info!(
+                //     "游戏结束bird.borrow().y:{},canvas height():{}",
+                //     bird.borrow().y,
+                //     self.context.canvas().unwrap().height()
+                // );
             }
 
             // 碰到管道
@@ -163,9 +164,9 @@ impl Game {
                 .context
                 .is_point_in_path_with_f64(bird.borrow().x, bird.borrow().y)
             {
-                log::info!("碰到管道");
+                // log::info!("碰到管道");
             }
+            log::info!("鸟的位置x:{},y:{}", bird.borrow().x, bird.borrow().y);
         }
-        // log::info!("鸟的位置x:{},y:{}", bird.borrow().x, bird.borrow().y);
     }
 }

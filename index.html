@@ -5,37 +5,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>飞翔的小鸟Rust版本</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      overflow: hidden;
-    }
-
-    canvas {
-      border: 1px solid #000;
-    }
-  </style>
+  <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
-  <canvas width="375" height="667" id="canvas">当前浏览器不支持canvas元素</canvas>
-  <script type="module">
-    import init, { Game } from './pkg/flappybird_canvas_by_rust_wasm.js';
-    ((async function main() {
-      await init();
-      const game = new Game('canvas');
-      game.game_start();
-      function animation() {
-        game.animation()
-        requestAnimationFrame(animation);
-      }
-      animation()
-    })())
-  </script>
+  <div class="game-container">
+    <canvas width="375" height="667" id="canvas">当前浏览器不支持canvas元素</canvas>
+    <!-- 暂停&继续按钮 -->
+    <div class="button-container">
+      <img id="pause" src="./asset/images/button_pause.png" title="暂停">
+      <img style="display: none;" id="resume" src="./asset/images/button_resume.png" title="继续">
+    </div>
+  </div>
+  <script type="module" src="./dist/Game.js"></script>
 </body>
 
 </html>
