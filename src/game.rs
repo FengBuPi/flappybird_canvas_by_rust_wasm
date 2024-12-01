@@ -166,7 +166,7 @@ impl Game {
             {
                 // log::info!("碰到管道");
             }
-            log::info!("鸟的位置x:{},y:{}", bird.borrow().x, bird.borrow().y);
+            // log::info!("鸟的位置x:{},y:{}", bird.borrow().x, bird.borrow().y);
         }
     }
 }
