@@ -63,16 +63,14 @@ impl Bird {
     }
 }
 
+// 绘制鸟
 impl Draw for Bird {
-    // 绘制鸟
     fn draw(&mut self) {
         self.ctx.save();
         self.ctx.translate(self.x, self.y).unwrap(); // 控制小鸟位移
-        let current_time = window().unwrap().performance().unwrap().now(); // 返回当前时间的高精度时间戳
-        let delta_time = (current_time - self.start_time).floor();
-        self.start_time = current_time;
-
-        // 小鸟位移
+                                                     // 时间间隔
+        let delta_time = 5.0;
+        // 小鸟位移 x=v0t+(a*t^2)/2
         self.y += *self.v0.borrow() * delta_time + self.acc * delta_time * delta_time / 2.0;
 
         let current_v0 = *self.v0.borrow(); // 不可变借用一次，缓存当前值
