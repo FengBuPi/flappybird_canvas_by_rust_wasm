@@ -21,19 +21,55 @@ canvas {
     position: absolute;
     top: 10px;
     right: 10px;
+  }
 
-    &>img:hover {
-      /* 鼠标悬停时放大 */
-      transform: scale(1.1);
-      /* 鼠标悬停时降低透明度 */
-      opacity: 0.8;
-    }
+  &>.game-over {
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 20%;
+    right: 0;
+    margin: auto;
+  }
 
-    &>img:active {
-      /* 鼠标点击时缩小 */
-      transform: scale(0.9);
-      /* 鼠标点击时进一步降低透明度 */
-      opacity: 0.6;
+  &>.game-start {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto auto 80%;
+
+    &>div {
+      display: grid;
+      justify-items: center;
+      align-items: center;
     }
   }
+}
+
+/* 禁止框选,拖拽,选中 */
+[unSelectable] {
+  -webkit-user-drag: none;
+  -moz-user-drag: none;
+  -ms-user-drag: none;
+  user-select: none;
+}
+
+/* 具有按钮属性后默认设置的样式 */
+[isBtn]:hover {
+  /* 鼠标悬停时放大 */
+  transform: scale(1.1);
+}
+
+[isBtn]:active {
+  /* 鼠标点击时缩小 */
+  transform: scale(0.9);
 }

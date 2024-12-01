@@ -13,8 +13,21 @@
     <canvas width="375" height="667" id="canvas">当前浏览器不支持canvas元素</canvas>
     <!-- 暂停&继续按钮 -->
     <div class="button-container">
-      <img id="pause" src="./asset/images/button_pause.png" title="暂停">
-      <img style="display: none;" id="resume" src="./asset/images/button_resume.png" title="继续">
+      <img id="pause" src="./asset/images/button_pause.png" title="暂停" loading="eager" unSelectable isBtn>
+      <img id="resume" src="./asset/images/button_resume.png" title="继续" loading="eager" unSelectable="on" isBtn
+        style="display: none;">
+    </div>
+
+    <!-- 游戏结束 -->
+    <div class="game-over">
+      <img id="game-over-title" src="./asset/images/text_game_over.png" title="游戏结束" loading="eager"
+        style="display: none;" unSelectable isBtn>
+    </div>
+
+    <div class="game-start">
+      <div><img src="./asset/images/title.png" title="飞翔的小鸟"></div>
+      <div><img src="./asset/images/button_play.png" title="游戏开始" unSelectable isBtn></div>
+      <div><img src="./asset/images/button_score.png" title="排行榜" unSelectable isBtn></div>
     </div>
   </div>
   <script type="module" src="./dist/Game.js"></script>
