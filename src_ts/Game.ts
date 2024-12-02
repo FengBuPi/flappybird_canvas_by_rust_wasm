@@ -1,5 +1,7 @@
 import init, { Game } from '../pkg/flappybird_canvas_by_rust_wasm.js';
-import { runing } from './pause.js';
+import { addResumeandPauseEvent } from './components/gamePause.js';
+import runing from './State/gameState.js';
+console.log(runing)
 // 图片预加载
 // let imgs = [
 //   "/asset/images/sky.png",
@@ -13,12 +15,15 @@ import { runing } from './pause.js';
 //   image.src = img;
 // }
 
+
+
 // 主函数
 async function main(): Promise<void> {
   await init();
+  addResumeandPauseEvent()
   const game = new Game('canvas');
   game.game_init();
-
+  // game.frame()
   function animation() {
     if (runing) {
       game.frame()

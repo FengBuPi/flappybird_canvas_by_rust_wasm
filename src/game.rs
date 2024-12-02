@@ -10,10 +10,12 @@ use console_error_panic_hook::set_once;
 use console_log;
 use log::Level; // 调试
 
+// 标准库
 use std::cell::RefCell;
-// wasm 运行环境
 use std::panic;
 use std::rc::Rc;
+
+// wasm 运行环境
 use wasm_bindgen::prelude::*;
 use web_sys::*;
 
