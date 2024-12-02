@@ -1,7 +1,7 @@
 import init, { Game } from '../pkg/flappybird_canvas_by_rust_wasm.js';
-import { addResumeandPauseEvent } from './components/gamePause.js';
 import runing from './State/gameState.js';
-console.log(runing)
+import { addResumeandPauseEvent } from './components/gamePause.js';
+
 // 图片预加载
 // let imgs = [
 //   "/asset/images/sky.png",
