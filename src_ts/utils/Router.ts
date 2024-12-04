@@ -13,7 +13,7 @@ export interface Component {
 export default class Router {
   app: HTMLElement;
   routes: { [key: string]: RouterOption };
-
+  nowPage: string = '/';
   constructor(router: RouterOption[] = [], app: HTMLElement) {
     for (const element of router) {
       if (element.url === '/') {
@@ -32,6 +32,8 @@ export default class Router {
 
   public push(url: string, callback?: () => void) {
     window.history.pushState({}, '', `index.html#${url}`);
+    this.unmounted(this.routes[this.nowPage])
+    this.nowPage = url
     this.mounted(this.routes[url])
     callback && callback()
   }
