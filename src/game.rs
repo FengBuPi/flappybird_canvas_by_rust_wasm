@@ -7,7 +7,7 @@ use crate::sky::Sky;
 
 // 用于调试代码的第三方库
 use console_error_panic_hook::set_once;
-use console_log;
+use console_log::{self, log};
 use log::Level; // 调试
 
 // 标准库
@@ -144,31 +144,79 @@ impl Game {
         );
         // 开启新路径
         self.context.begin_path();
-        // 绘制所有元素
+
+        // 先绘制所有元素
         for drawable in self.drawable_list.iter() {
             drawable.borrow_mut().draw();
         }
 
         if let Some(bird) = &self.bird {
-            // 碰到地面或者天花板 gameover
-            if (bird.borrow().y > (self.context.canvas().unwrap().height() - 112) as f64)
-                || (bird.borrow().y < -10.0)
-            {
-                // log::info!(
-                //     "游戏结束bird.borrow().y:{},canvas height():{}",
-                //     bird.borrow().y,
-                //     self.context.canvas().unwrap().height()
-                // );
-            }
+            let bird_ref = bird.borrow();
+            // 获取小鸟的边界
+            if let Some((bird_x, bird_y, bird_width, bird_height)) = bird_ref.get_bounds() {
+                // 检查与地面和天花板的碰撞
+                if (bird_ref.y > (self.context.canvas().unwrap().height() - 112) as f64)
+                    || (bird_ref.y < -10.0)
+                {
+                    log::info!("碰到地面或天花板，游戏结束！");
+                    // TODO: 在这里添加游戏结束的处理逻辑
+                }
 
-            // 碰到管道
-            if self
-                .context
-                .is_point_in_path_with_f64(bird.borrow().x, bird.borrow().y)
-            {
-                // log::info!("碰到管道");
+                // 检查与管道的碰撞
+                for drawable in self.drawable_list.iter() {
+                    let drawable_ref = drawable.borrow();
+                    // 尝试将drawable转换为Pipe类型
+                    if let Some(pipe) = drawable_ref.as_any().downcast_ref::<Pipe>() {
+                        let (pipe_x, pipe_top_y, _, pipe_bottom_y) = pipe.get_pipes_position();
+                        let pipe_width = pipe.get_width();
+
+                        // 检查与上管道的碰撞
+                        if self.check_collision(
+                            bird_x,
+                            bird_y,
+                            bird_width,
+                            bird_height,
+                            pipe_x,
+                            pipe_top_y,
+                            pipe_width,
+                            pipe.get_height(),
+                        ) {
+                            log::info!("碰到上管道，游戏结束！");
+                            // TODO: 添加游戏结束处理逻辑
+                        }
+
+                        // 检查与下管道的碰撞
+                        if self.check_collision(
+                            bird_x,
+                            bird_y,
+                            bird_width,
+                            bird_height,
+                            pipe_x,
+                            pipe_bottom_y,
+                            pipe_width,
+                            pipe.get_height(),
+                        ) {
+                            log::info!("碰到下管道，游戏结束！");
+                            // TODO: 添加游戏结束处理逻辑
+                        }
+                    }
+                }
             }
-            // log::info!("鸟的位置x:{},y:{}", bird.borrow().x, bird.borrow().y);
         }
+    }
+
+    // 添加碰撞检测辅助方法
+    fn check_collision(
+        &self,
+        x1: f64,
+        y1: f64,
+        w1: f64,
+        h1: f64,
+        x2: f64,
+        y2: f64,
+        w2: f64,
+        h2: f64,
+    ) -> bool {
+        x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2
     }
 }

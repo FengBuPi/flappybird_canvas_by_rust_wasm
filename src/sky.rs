@@ -1,4 +1,5 @@
 use crate::draw::Draw;
+use std::any::Any;
 use web_sys::*;
 
 pub struct Sky {
@@ -36,5 +37,9 @@ impl Draw for Sky {
         if self.x <= -sky_img_width {
             self.x += 2.0 * sky_img_width;
         }
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }

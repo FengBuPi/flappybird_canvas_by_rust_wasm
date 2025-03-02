@@ -1,4 +1,5 @@
 use crate::draw::Draw;
+use std::any::Any;
 use std::cell::RefCell;
 use std::rc::Rc;
 use wasm_bindgen::prelude::*;
@@ -61,6 +62,12 @@ impl Bird {
             .unwrap();
         cb.forget(); // 防止闭包被清理
     }
+
+    pub fn get_bounds(&self) -> Option<(f64, f64, f64, f64)> {
+        let width = self.bird_width * 0.8;
+        let height = self.bird_height * 0.8;
+        Some((self.x - width / 2.0, self.y - height / 2.0, width, height))
+    }
 }
 
 // 绘制鸟
@@ -103,5 +110,9 @@ impl Draw for Bird {
             self.index = 0.0;
         }
         self.ctx.restore(); // 恢复状态
+    }
+
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
