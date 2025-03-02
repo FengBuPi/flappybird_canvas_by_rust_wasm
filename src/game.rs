@@ -7,7 +7,7 @@ use crate::sky::Sky;
 
 // 用于调试代码的第三方库
 use console_error_panic_hook::set_once;
-use console_log::{self, log};
+use console_log::{self};
 use log::Level; // 调试
 
 // 标准库
@@ -103,7 +103,7 @@ impl Game {
         pipe1_image.set_src("/asset/images/pipe1.png");
         let pipe2_image = HtmlImageElement::new().unwrap();
         pipe2_image.set_src("/asset/images/pipe2.png");
-        for i in 0..6 {
+        for i in 0..4 {
             let pipe1_image = pipe1_image.clone();
             let pipe2_image = pipe2_image.clone();
             let x = (i * 3 * pipe1_image.width()) as f64;
