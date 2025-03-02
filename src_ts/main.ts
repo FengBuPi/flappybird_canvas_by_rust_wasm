@@ -1,4 +1,4 @@
-import { initRouter } from './Router/router.js';
+import { initRouter } from "./Router/router.js";
 
 // 图片预加载
 // let imgs = [
@@ -14,7 +14,7 @@ import { initRouter } from './Router/router.js';
 // }
 
 // 初始化路由
-initRouter()
+initRouter();
 
 // 主函数
 async function main(): Promise<void> {
@@ -33,5 +33,5 @@ async function main(): Promise<void> {
 }
 
 window.onload = () => {
-  main()
-}
+  main();
+};
