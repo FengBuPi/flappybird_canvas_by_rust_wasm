@@ -1,9 +1,15 @@
 # 编译
+
 监听文件变化触发编译
-~~~bash
+
+```bash
 cargo watch -s 'wasm-pack build --dev --target web && tsc'
-~~~
+```
+
+然后使用 live-server 启动服务
+
 # git 提交规范
+
 ```bash
 feat: 新功能
 fix: 修复bug
