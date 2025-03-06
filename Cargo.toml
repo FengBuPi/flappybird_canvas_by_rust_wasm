@@ -26,4 +26,5 @@ web-sys = { version = "0.3.70", features = [
   'Event',
   'MouseEvent',
   "Performance",
+  "Location"
 ] }

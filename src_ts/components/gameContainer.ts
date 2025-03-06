@@ -11,12 +11,23 @@ async function startGame() {
   const game = new Game("canvas");
   game.game_init();
   game.frame();
+
   function animation() {
-    if (runing.value) {
-      game.frame();
+    // 如果游戏暂停，只继续动画循环但不更新游戏状态
+    if (!runing.value) {
+      raf = requestAnimationFrame(animation);
+      return;
     }
+    // 更新游戏状态,但如果游戏帧返回 true（表示游戏结束）
+    if (game.frame()) {
+      runing.value = false;
+      cancelAnimationFrame(raf);
+      return;
+    }
+    // 继续下一帧动画
     raf = requestAnimationFrame(animation);
   }
+
   animation();
 }
 

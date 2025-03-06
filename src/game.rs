@@ -103,10 +103,15 @@ impl Game {
         pipe1_image.set_src("/asset/images/pipe1.png");
         let pipe2_image = HtmlImageElement::new().unwrap();
         pipe2_image.set_src("/asset/images/pipe2.png");
+
+        // 获取画布宽度，用于计算初始位置
+        let canvas_width = self.context.canvas().unwrap().width() as f64;
+
         for i in 0..4 {
             let pipe1_image = pipe1_image.clone();
             let pipe2_image = pipe2_image.clone();
-            let x = (i * 3 * pipe1_image.width()) as f64;
+            // 修改初始x坐标，确保第一个管道在画面右侧
+            let x = canvas_width + (i * 3 * pipe1_image.width()) as f64;
             self.drawable_list.push(Rc::new(RefCell::new(Pipe::new(
                 &self.context,
                 pipe1_image,
@@ -134,7 +139,7 @@ impl Game {
     }
 
     // 动画帧
-    pub fn frame(&mut self) {
+    pub fn frame(&mut self) -> bool {
         // 清除画布
         self.context.clear_rect(
             0.0,
@@ -159,7 +164,7 @@ impl Game {
                     || (bird_ref.y < -10.0)
                 {
                     log::info!("碰到地面或天花板，游戏结束！");
-                    // TODO: 在这里添加游戏结束的处理逻辑
+                    return self.game_over();
                 }
 
                 // 检查与管道的碰撞
@@ -182,7 +187,7 @@ impl Game {
                             pipe.get_height(),
                         ) {
                             log::info!("碰到上管道，游戏结束！");
-                            // TODO: 添加游戏结束处理逻辑
+                            return self.game_over();
                         }
 
                         // 检查与下管道的碰撞
@@ -197,12 +202,13 @@ impl Game {
                             pipe.get_height(),
                         ) {
                             log::info!("碰到下管道，游戏结束！");
-                            // TODO: 添加游戏结束处理逻辑
+                            return self.game_over();
                         }
                     }
                 }
             }
         }
+        false // 游戏继续
     }
 
     // 添加碰撞检测辅助方法
@@ -218,5 +224,16 @@ impl Game {
         h2: f64,
     ) -> bool {
         x1 < x2 + w2 && x1 + w1 > x2 && y1 < y2 + h2 && y1 + h1 > y2
+    }
+
+    // 添加一个辅助方法来处理游戏结束
+    fn game_over(&self) -> bool {
+        window()
+            .unwrap()
+            .confirm_with_message("游戏结束！是否重新开始？")
+            .unwrap();
+        let location = window().unwrap().location();
+        location.reload().unwrap();
+        true // 返回 true 表示游戏已结束
     }
 }
