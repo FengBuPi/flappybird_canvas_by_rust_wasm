@@ -3,11 +3,30 @@ import runing from "../State/gameState.js";
 import { Component } from "./../utils/Router";
 import { initGamePauseModule } from "../components/gamePause.js";
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+// 添加图片预加载函数
+async function preloadImages() {
+  const images = [
+    "./asset/images/sky.png",
+    "./asset/images/land.png",
+    "./asset/images/pipe1.png",
+    "./asset/images/pipe2.png",
+    "./asset/images/birds.png",
+  ];
+
+  const loadImage = (src: string): Promise<void> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve();
+      img.src = src;
+    });
+  };
+
+  await Promise.all(images.map(loadImage));
+}
 
 let raf: number = 0;
 async function startGame() {
-  await init();
+  await Promise.all([init(), preloadImages()]);
   const game = new Game("canvas");
   game.game_init();
   game.frame();
