@@ -6,22 +6,27 @@ import { initGamePauseModule } from "../components/gamePause.js";
 // 添加图片预加载函数
 async function preloadImages() {
   const images = [
-    "./asset/images/sky.png",
-    "./asset/images/land.png",
-    "./asset/images/pipe1.png",
-    "./asset/images/pipe2.png",
-    "./asset/images/birds.png",
+    "/asset/images/sky.png",
+    "/asset/images/land.png",
+    "/asset/images/pipe1.png",
+    "/asset/images/pipe2.png",
+    "/asset/images/birds.png",
   ];
 
   const loadImage = (src: string): Promise<void> => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const img = new Image();
       img.onload = () => resolve();
+      img.onerror = () => reject(new Error(`图片文件加载失败: ${src}`));
       img.src = src;
     });
   };
 
-  await Promise.all(images.map(loadImage));
+  try {
+    await Promise.all(images.map(loadImage));
+  } catch (error) {
+    console.error("图片预加载错误:", error);
+  }
 }
 
 let raf: number = 0;
